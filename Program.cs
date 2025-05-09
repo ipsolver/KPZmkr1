@@ -8,7 +8,6 @@ namespace mkr1
     {
         static void Main()
         {
-            //Завдання 5
             LightElementNode div = new LightElementNode("div");
             div.AddClass("container");
 
@@ -22,13 +21,32 @@ namespace mkr1
             for (int i = 1; i <= 5; i++)
             {
                 LightElementNode li = new LightElementNode("li", isBlock: false);
-                li.AppendChild(new LightTextNode($"Its item of list"));
+                li.AppendChild(new LightTextNode($"Its item of list #{i}"));
                 ul.AppendChild(li);
             }
 
             div.AppendChild(ul);
 
-            Console.WriteLine("\nLightHTML Output:");
+            //Обхід у ширину
+            Console.WriteLine("\nBreadth Iterator:");
+            var bfsIterator = div.CreateBreadthIterator();
+
+            while (bfsIterator.MoveNext())
+            {
+                var node = bfsIterator.Current();
+                Console.WriteLine($"[{node.GetType().Name}] {node.Render().Trim()}");
+            }
+
+            //Обхід у глибину
+            Console.WriteLine("\nDepth Iterator:");
+            var depth = div.CreateDepthIterator();
+            while (depth.MoveNext())
+            {
+                var node = depth.Current();
+                Console.WriteLine($"[{node.GetType().Name}] {node.Render().Trim()}");
+            }
+
+            Console.WriteLine("\nHTML Render:");
             Console.WriteLine(div.Render());
         }
     }
