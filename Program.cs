@@ -8,18 +8,25 @@ namespace mkr1
     {
         static void Main()
         {
-            var div = new LightElementNode("div");
+            var root = new LightElementNode("div");
+            root.AddClass("main");
+
             var h1 = new LightElementNode("h1");
-            var text = new LightTextNode("Hello!");
+            h1.AppendChild(new LightTextNode("Its State pattern!"));
+            root.AppendChild(h1);
 
-            var invoker = new Invoker();
+            // Додаємо подію
+            root.On("click", () => Console.WriteLine("DIV clicked"));
 
-            invoker.ExecuteCommand(new AddClassCommand(div, "container"));
-            invoker.ExecuteCommand(new AppendChildCommand(h1, text));
-            invoker.ExecuteCommand(new AppendChildCommand(div, h1));
+            Console.WriteLine("----- Standard State -----");
+            Console.WriteLine(root.RenderFull());
+            root.Trigger("click");
 
-            Console.WriteLine("\nRender with Command:");
-            Console.WriteLine(div.Render());
+            root.SetRenderBehavior(new NoRender());
+
+            Console.WriteLine("\n------ NoRender State ------");
+            Console.WriteLine(root.RenderFull());
+            root.Trigger("click");
         }
     }
 }
