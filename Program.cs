@@ -8,45 +8,17 @@ namespace mkr1
     {
         static void Main()
         {
-            LightElementNode div = new LightElementNode("div");
-            div.AddClass("container");
+            var div = new LightElementNode("div");
+            var h1 = new LightElementNode("h1");
+            var text = new LightTextNode("Hello!");
 
-            LightElementNode header = new LightElementNode("h1", isBlock: true);
-            header.AppendChild(new LightTextNode("Hello!"));
-            div.AppendChild(header);
+            var invoker = new Invoker();
 
-            LightElementNode ul = new LightElementNode("ul");
-            ul.AddClass("list");
+            invoker.ExecuteCommand(new AddClassCommand(div, "container"));
+            invoker.ExecuteCommand(new AppendChildCommand(h1, text));
+            invoker.ExecuteCommand(new AppendChildCommand(div, h1));
 
-            for (int i = 1; i <= 5; i++)
-            {
-                LightElementNode li = new LightElementNode("li", isBlock: false);
-                li.AppendChild(new LightTextNode($"Its item of list #{i}"));
-                ul.AppendChild(li);
-            }
-
-            div.AppendChild(ul);
-
-            //Обхід у ширину
-            Console.WriteLine("\nBreadth Iterator:");
-            var bfsIterator = div.CreateBreadthIterator();
-
-            while (bfsIterator.MoveNext())
-            {
-                var node = bfsIterator.Current();
-                Console.WriteLine($"[{node.GetType().Name}] {node.Render().Trim()}");
-            }
-
-            //Обхід у глибину
-            Console.WriteLine("\nDepth Iterator:");
-            var depth = div.CreateDepthIterator();
-            while (depth.MoveNext())
-            {
-                var node = depth.Current();
-                Console.WriteLine($"[{node.GetType().Name}] {node.Render().Trim()}");
-            }
-
-            Console.WriteLine("\nHTML Render:");
+            Console.WriteLine("\nRender with Command:");
             Console.WriteLine(div.Render());
         }
     }
