@@ -22,5 +22,7 @@ namespace mkr1.LightHTML.Classes
         {
             return text;
         }
+
+        protected override string OnRenderContent(int indent) => new string(' ', indent * 2) + text + "\n";
     }
 }

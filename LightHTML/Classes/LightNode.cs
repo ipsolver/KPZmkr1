@@ -24,6 +24,19 @@ namespace mkr1.LightHTML.Classes
         {
             _renderBehavior.Handle(this, eventName);
         }
+        public virtual string RenderWithLifecycle(int indent = 0)
+        {
+            StringBuilder sb = new();
+            sb.Append(OnBeforeRender());
+            sb.Append(OnRenderContent(indent));
+            sb.Append(OnAfterRender());
+            return sb.ToString();
+        }
+
+        protected virtual string OnBeforeRender() => string.Empty;
+        protected virtual string OnAfterRender() => string.Empty;
+        protected abstract string OnRenderContent(int indent);
+
         public abstract string Render();
         public abstract string GetInner();
     }

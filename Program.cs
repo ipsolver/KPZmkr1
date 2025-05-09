@@ -12,20 +12,27 @@ namespace mkr1
             root.AddClass("main");
 
             var h1 = new LightElementNode("h1");
-            h1.AppendChild(new LightTextNode("Its State pattern!"));
+            h1.AppendChild(new LightTextNode("Це демонстрація шаблонного методу."));
             root.AppendChild(h1);
 
-            // Додаємо подію
-            root.On("click", () => Console.WriteLine("DIV clicked"));
+            var p = new LightElementNode("p");
+            p.AppendChild(new LightTextNode("Текст усередині параграфа."));
+            root.AppendChild(p);
 
-            Console.WriteLine("----- Standard State -----");
+            root.On("click", () => Console.WriteLine("Клік на <div>!"));
+
+            // Рендер з шаблонним методом
+            Console.WriteLine("----- RenderWithLifecycle (Template Method) -----");
+            Console.WriteLine(root.RenderWithLifecycle());
+
+            Console.WriteLine("----- Standard State (RenderFull) -----");
+            root.SetRenderBehavior(new StandardRender());
             Console.WriteLine(root.RenderFull());
-            root.Trigger("click");
 
+            Console.WriteLine("----- NoRender State -----");
             root.SetRenderBehavior(new NoRender());
-
-            Console.WriteLine("\n------ NoRender State ------");
             Console.WriteLine(root.RenderFull());
+
             root.Trigger("click");
         }
     }

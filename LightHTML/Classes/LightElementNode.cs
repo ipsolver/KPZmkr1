@@ -52,24 +52,7 @@ namespace mkr1.LightHTML.Classes
 
         public override string Render()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"<{TagName}");
-
-            if (CssClasses.Count > 0)
-            {
-                sb.Append($" class=\"{string.Join(" ", CssClasses)}\"");
-            }
-
-            if (IsSelfClosing)
-            {
-                sb.Append(" />\n");
-            }
-            else
-            {
-                sb.Append($">{GetInner()}</{TagName}>\n");
-            }
-
-            return sb.ToString();
+            return RenderFormatted(0);
         }
 
         public List<LightNode> GetChildren() => children;
@@ -136,6 +119,13 @@ namespace mkr1.LightHTML.Classes
                 }
             }
         }
+
+        protected override string OnRenderContent(int indent)
+        {
+            return RenderFormatted(indent); 
+        }
+        protected override string OnBeforeRender() => $"<!-- START {TagName} -->\n";
+        protected override string OnAfterRender() => $"<!-- END {TagName} -->\n";
 
     }
 }
