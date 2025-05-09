@@ -16,6 +16,7 @@ namespace mkr1.LightHTML.Classes
         private List<string> CssClasses { get; }
         private List<LightNode> children;
         private bool reverseDirection = false;
+        private Dictionary<string, List<Action>> _eventMap = new();
 
         public LightElementNode(string tagName, bool isBlock = true, bool isSelfClosing = false)
         {
@@ -48,8 +49,6 @@ namespace mkr1.LightHTML.Classes
             }
             return sb.ToString();
         }
-
-
 
         public override string Render()
         {
@@ -92,6 +91,50 @@ namespace mkr1.LightHTML.Classes
         public DepthIterator CreateDepthIterator()
         {
             return new DepthIterator(this);
+        }
+        public string RenderFormatted(int indentLevel = 0)
+        {
+            var indent = new string(' ', indentLevel * 2);
+            var sb = new StringBuilder();
+
+            sb.Append($"{indent}<{TagName}");
+            if (CssClasses.Count > 0)
+                sb.Append($" class=\"{string.Join(" ", CssClasses)}\"");
+
+            if (IsSelfClosing)
+            {
+                sb.Append(" />\n");
+            }
+            else
+            {
+                sb.Append(">\n");
+                foreach (var child in children)
+                {
+                    sb.Append(child.RenderFull(indentLevel + 1));
+                }
+                sb.Append($"{indent}</{TagName}>\n");
+            }
+
+            return sb.ToString();
+        }
+
+        public void On(string eventType, Action callback)
+        {
+            if (!_eventMap.ContainsKey(eventType))
+                _eventMap[eventType] = new List<Action>();
+
+            _eventMap[eventType].Add(callback);
+        }
+
+        public void Dispatch(string eventType)
+        {
+            if (_eventMap.TryGetValue(eventType, out var handlers))
+            {
+                foreach (var action in handlers)
+                {
+                    action.Invoke();
+                }
+            }
         }
 
     }
