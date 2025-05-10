@@ -39,5 +39,7 @@ namespace mkr1.LightHTML.Classes
 
         public abstract string Render();
         public abstract string GetInner();
+        public abstract void Accept(ILightNodeVisitor visitor);
+
     }
 }
