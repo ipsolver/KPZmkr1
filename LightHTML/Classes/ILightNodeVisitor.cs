@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace mkr1.LightHTML.Classes
+{
+    public interface ILightNodeVisitor
+    {
+        void VisitText(LightTextNode textNode);
+        void VisitElement(LightElementNode elementNode);
+    }
+}

@@ -24,5 +24,11 @@ namespace mkr1.LightHTML.Classes
         }
 
         protected override string OnRenderContent(int indent) => new string(' ', indent * 2) + text + "\n";
+
+        public override void Accept(ILightNodeVisitor visitor)
+        {
+            visitor.VisitText(this);
+        }
+
     }
 }

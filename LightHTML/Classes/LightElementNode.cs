@@ -10,10 +10,10 @@ namespace mkr1.LightHTML.Classes
 {
     public class LightElementNode : LightNode, INodeNumerator
     {
-        private string TagName { get; }
+        public string TagName { get; }
         private bool IsBlock { get; }
-        private bool IsSelfClosing { get; }
-        private List<string> CssClasses { get; }
+        public bool IsSelfClosing { get; }
+        public List<string> CssClasses { get; }
         private List<LightNode> children;
         private bool reverseDirection = false;
         private Dictionary<string, List<Action>> _eventMap = new();
@@ -126,6 +126,12 @@ namespace mkr1.LightHTML.Classes
         }
         protected override string OnBeforeRender() => $"<!-- START {TagName} -->\n";
         protected override string OnAfterRender() => $"<!-- END {TagName} -->\n";
+
+        public override void Accept(ILightNodeVisitor visitor)
+        {
+            visitor.VisitElement(this);
+        }
+
 
     }
 }

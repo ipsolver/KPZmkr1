@@ -1,7 +1,6 @@
 ﻿using mkr1.LightHTML.Classes;
-using static System.Net.Mime.MediaTypeNames;
-using System.IO;
-using System.Threading;
+using System;
+
 namespace mkr1
 {
     class Program
@@ -12,19 +11,20 @@ namespace mkr1
             root.AddClass("main");
 
             var h1 = new LightElementNode("h1");
-            h1.AppendChild(new LightTextNode("Це демонстрація шаблонного методу."));
+            h1.AppendChild(new LightTextNode("Це демонстрація шаблонного методу!"));
             root.AppendChild(h1);
 
             var p = new LightElementNode("p");
-            p.AppendChild(new LightTextNode("Текст усередині параграфа."));
+            p.AppendChild(new LightTextNode("Текст усередині параграфа"));
             root.AppendChild(p);
 
             root.On("click", () => Console.WriteLine("Клік на <div>!"));
 
-            // Рендер з шаблонним методом
+            // Шаблонний метод
             Console.WriteLine("----- RenderWithLifecycle (Template Method) -----");
             Console.WriteLine(root.RenderWithLifecycle());
 
+            // Стейт
             Console.WriteLine("----- Standard State (RenderFull) -----");
             root.SetRenderBehavior(new StandardRender());
             Console.WriteLine(root.RenderFull());
@@ -34,6 +34,14 @@ namespace mkr1
             Console.WriteLine(root.RenderFull());
 
             root.Trigger("click");
+
+            // Visitor: генерує HTML-файл
+            Console.WriteLine("\n----- Visitor: Export to HTML File -----");
+            var exportVisitor = new HtmlExportVisitor();
+            root.Accept(exportVisitor);
+            exportVisitor.ExportToFile("../../../answer.html");
+
+            Console.WriteLine("HTML записано у файл: answer.html");
         }
     }
 }
